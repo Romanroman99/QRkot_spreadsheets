@@ -10,7 +10,7 @@ PERMISSIONS_BODY = {'type': 'user',
                     'role': 'writer',
                     'emailAddress': settings.email}
 
-SPREADSHEET_BODY = {
+spreadsheet_body = {
     'properties': {'title': '',
                    'locale': 'ru_RU'},
     'sheets': [{'properties': {'sheetType': 'GRID',
@@ -27,11 +27,13 @@ TABLE_VALUES = [
 
 
 async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
-    SPREADSHEET_BODY['properties']['title'] = 'Отчет на {}'.format(datetime.now().strftime(FORMAT))
+    spreadsheet_body['properties']['title'] = 'Отчет на {}'.format(
+        datetime.now().strftime(FORMAT)
+    )
     service = await wrapper_services.discover('sheets', 'v4')
 
     response = await wrapper_services.as_service_account(
-        service.spreadsheets.create(json=SPREADSHEET_BODY)
+        service.spreadsheets.create(json=spreadsheet_body)
     )
     spreadsheet_id = response['spreadsheetId']
     return spreadsheet_id
@@ -61,7 +63,11 @@ async def spreadsheets_update_value(
     service = await wrapper_services.discover('sheets', 'v4')
 
     for proj in projects:
-        new_row = [str(proj['name']), str(proj['project_lifetime']), str(proj['description'])]
+        new_row = [
+            str(proj['name']),
+            str(proj['project_lifetime']),
+            str(proj['description'])
+        ]
         TABLE_VALUES.append(new_row)
 
     update_body = {

@@ -32,9 +32,9 @@ async def create_new_project(
     project: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    '''
+    """
     Создает новый благотворительный проект.
-    '''
+    """
     await check_name_duplicate(project.name, session)
     await charity_project_crud.get_project_id_by_name(project.name, session)
     new_project = await charity_project_crud.create(project, session)
@@ -50,9 +50,9 @@ async def create_new_project(
 async def get_all_projects(
     session: AsyncSession = Depends(get_async_session),
 ):
-    '''
+    """
     Возвращает список всех благотворительных проектов.
-    '''
+    """
     return await charity_project_crud.get_multi(session)
 
 
@@ -66,9 +66,9 @@ async def partially_update_project(
     update_data: CharityProjectUpdate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    '''
+    """
     Частично обновляет информацию о благотворительном проекте.
-    '''
+    """
     patch_project = await check_exist(id, session)
     check_project_closed(patch_project)
     if update_data.name is not None:
@@ -85,9 +85,9 @@ async def partially_update_project(
     dependencies=[Depends(current_superuser)],
 )
 async def remove_project(id: int, session: AsyncSession = Depends(get_async_session)):
-    '''
+    """
     Удаляет благотворительный проект.
-    '''
+    """
     project = await check_exist(id, session)
     check_already_invested(project)
     return await charity_project_crud.remove(project, session)
