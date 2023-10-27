@@ -36,7 +36,6 @@ async def create_new_project(
     Создает новый благотворительный проект.
     """
     await check_name_duplicate(project.name, session)
-    await charity_project_crud.get_project_id_by_name(project.name, session)
     new_project = await charity_project_crud.create(project, session)
     await investing(new_project, Donation, session)
     return new_project

@@ -20,7 +20,7 @@ spreadsheet_body = {
                                                   'columnCount': 11}}}]
 }
 
-TABLE_VALUES = [
+table_values = [
     ['Отчет от', '{now_date_time}'],
     ['Топ проектов по скорости закрытия'],
     ['Название проекта', 'Время сбора', 'Описание']]
@@ -57,7 +57,7 @@ async def spreadsheets_update_value(
     projects: list,
     wrapper_services: Aiogoogle
 ) -> None:
-    TABLE_VALUES[0][1] = TABLE_VALUES[0][1].format(
+    table_values[0][1] = table_values[0][1].format(
         now_date_time=format(datetime.now().strftime(FORMAT))
     )
     service = await wrapper_services.discover('sheets', 'v4')
@@ -68,11 +68,11 @@ async def spreadsheets_update_value(
             str(proj['project_lifetime']),
             str(proj['description'])
         ]
-        TABLE_VALUES.append(new_row)
+        table_values.append(new_row)
 
     update_body = {
         'majorDimension': 'ROWS',
-        'values': TABLE_VALUES
+        'values': table_values
     }
     await wrapper_services.as_service_account(
         service.spreadsheets.values.update(
